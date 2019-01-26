@@ -5,9 +5,14 @@ function getListOfWords (count) {
   return listOfWords;
 }
 
+function getArrayOfDeclaredLengthWords(len) {
+  return dictionary[len-3];
+}
+
 function getWord(len) {
-  let filteredDict = dictionary.filter(word => word.length === len);
-  return filteredDict[0];
+  let filteredDict = getArrayOfDeclaredLengthWords(len);
+  let word = filteredDict[Math.floor(Math.random() * (filteredDict.length+1))];
+  return word;
 }
 
 module.exports = {
