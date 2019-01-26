@@ -16,26 +16,32 @@ const getDictionary = (dictSource) => {
 
 const getSortedDictionary = (dictArray) => {
   let sortedDictionary = [];
-  let stillSearching = 3;
+  // let stillSearching = 3;
   let wordLength = 3;
-  while(stillSearching > 0) {
+  while(true) { // stillSearching > 0) {
     let tempArray = dictArray.filter(word => word.length === wordLength);
     if (tempArray.length <= 0) {
-      stillSearching--;
+      break;
+      // stillSearching--;
     } 
     sortedDictionary.push(tempArray);
     wordLength++;
   }
-  for (let i=sortedDictionary.length-1; i>=0; i--) {
-    if (sortedDictionary[i].length > 0) {
-      break;
-    }
-    sortedDictionary.pop();
-  }
+  // left for possible different dictionaries
+  // for (let i=sortedDictionary.length-1; i>=0; i--) {
+  //   if (sortedDictionary[i].length > 0) {
+  //     break;
+  //   }
+  //   sortedDictionary.pop();
+  // }
   return sortedDictionary;
 }
 
 const dictionary = getSortedDictionary(getDictionary('./src/slowa.txt'));
+
+for (column of dictionary) {
+  console.log(column.length);
+}
 
 module.exports = {
   getDictionary: getDictionary,
