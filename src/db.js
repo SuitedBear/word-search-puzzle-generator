@@ -39,9 +39,9 @@ const getSortedDictionary = (dictArray) => {
 
 const dictionary = getSortedDictionary(getDictionary('./src/slowa.txt'));
 
-for (column of dictionary) {
-  console.log(column.length);
-}
+// for (column of dictionary) {
+//   console.log(column.length);
+// }
 
 module.exports = {
   getDictionary: getDictionary,
