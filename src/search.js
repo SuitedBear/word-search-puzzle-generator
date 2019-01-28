@@ -1,10 +1,5 @@
 const {dictionary} = require('../src/db');
 
-function getListOfWords (count) {
-  let listOfWords = [];
-  return listOfWords;
-}
-
 function getArrayOfDeclaredLengthWords(len) {
   return dictionary[len-3];
 }
@@ -16,6 +11,5 @@ function getWord(len) {
 }
 
 module.exports = {
-  getListOfWords: getListOfWords,
   getWord: getWord
 };
