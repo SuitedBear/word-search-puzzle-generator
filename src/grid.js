@@ -37,18 +37,19 @@ const insertingWord = (word, coords, grid) => {
 
 const insertToGrid = (word, grid) => {
   let possibleStarts = [];
-  for (let x=0; x<=grid.length-word.length; x++) {
-    for (let y=0; y<=grid[x].length-word.length; y++) {
+  for (let x=0; x<grid.length; x++) {
+    for (let y=0; y<grid[x].length; y++) {
       let possible = 0b111;
       //horizontal=1 vertical=2 diagonal=4
       for(let i=0; i<word.length; i++) {
-        if ((grid[x+i][y] !== word[i]) && (grid[x+i][y] !== ' ')) {
+        if ((x>grid.length-word.length) || ((grid[x+i][y] !== word[i]) && (grid[x+i][y] !== ' '))) {
           possible = possible & 0b110;
         }
-        if ((grid[x][y+i] !== word[i]) && (grid[x][y+i] !== ' ')) {
+        if ((y>grid[x].length-word.length) || ((grid[x][y+i] !== word[i]) && (grid[x][y+i] !== ' '))) {
           possible = possible & 0b101;
         }
-        if ((grid[x+i][y+i] !== word[i]) && (grid[x+i][y+i] !== ' ')) {
+        if (((x>grid.length-word.length) || (y>grid[x].length-word.length)) 
+        || ((grid[x+i][y+i] !== word[i]) && (grid[x+i][y+i] !== ' '))) {
           possible = possible & 0b011;
         }
       }
@@ -98,6 +99,12 @@ const generatePuzzle = (x, y, wordCount, maxWordLength=0, difficulty=50) => {
   let wordLength = maxWordLength ? maxWordLength : Math.max(x, y);
   while ((wordList.length < wordCount) && failCounter) {
     let word = search.getWord(wordLength);
+    if (word === null) {
+      failCounter--;
+      wordLength--;
+      // console.log(`there isn't any ${wordLength}-letter word!`);
+      continue;
+    }
     if (checkSimilarities(word, wordList)) {
       failCounter--;
       continue;

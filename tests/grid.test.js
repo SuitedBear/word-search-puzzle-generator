@@ -48,8 +48,8 @@ test('should return null because word is to long', () => {
 });
 
 test('should return { grid:array of arrays, list:array } structure', () => {
-  expect(grid.generatePuzzle(x, y, 10)).toBe(expect.objectContaining({
-    grid: expect.toBe(Array),
-    list: expect.toBe(Array)
+  expect(grid.generatePuzzle(x, y, 10)).toEqual(expect.objectContaining({
+    grid: expect.any(Array), 
+    list: expect.any(Array)
   }));
 })

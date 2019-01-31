@@ -1,3 +1,11 @@
-const { generatePuzzle } = require('./src/grid');
+const app = require('./src/app');
 
-console.log(generatePuzzle(10, 10, 20));
+const PORT = process.env.PORT ? process.env.PORT : 3001;
+app.listen(PORT, () => console.log(`App listening on port ${PORT.toString()} `));
+
+//TODO:
+//-rethink randomisation and retry counter
+//-word length
+//-rest api
+//-database instead of file
+//-integration tests
