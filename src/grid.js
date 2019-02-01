@@ -100,7 +100,7 @@ const generatePuzzle = (x, y, wordCount, maxWordLength=0, difficulty=50) => {
   while ((wordList.length < wordCount) && failCounter) {
     let word = search.getWord(wordLength);
     if (word === null) {
-      failCounter--;
+      //failCounter--;
       wordLength--;
       // console.log(`there isn't any ${wordLength}-letter word!`);
       continue;
@@ -120,6 +120,7 @@ const generatePuzzle = (x, y, wordCount, maxWordLength=0, difficulty=50) => {
     failCounter += 3;
     if (wordLength >= 4) wordLength -= Math.round(Math.random()); 
   }
+  if(failCounter === 0) console.log(`generated only ${wordList.length} words`);
   newGrid = fillWithLetters(newGrid);
   return {
     grid: newGrid,

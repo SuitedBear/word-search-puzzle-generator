@@ -1,6 +1,6 @@
 const express = require('express');
 const { dictionary } = require('./db');
-const { generatePuzzle } = require('./grid');
+const { getPuzzle } = require('./apihandlers');
 
 const app = express();
 app.locals.dictionary = dictionary;
@@ -11,11 +11,8 @@ app.get('/', (req, res) => {
 });
 
 app.get('/puzzle', (req, res) => {
-  let width=req.query.width;
-  let height=req.query.height;
-  let words=req.query.words;
-  let puzzle = generatePuzzle(width, height, words);
-  res.send(JSON.stringify(puzzle));
+  res = getPuzzle(req, res);
+  return res;
 });
 
 app.post('/feedback', (req, res) => {
