@@ -57,7 +57,8 @@ const insertToGrid = (word, grid) => {
     }
   }
   if (possibleStarts.length > 0) {
-    let coords = possibleStarts[Math.floor(Math.random() * possibleStarts.length)]
+    let coords = possibleStarts[Math.floor(Math.random() * possibleStarts.length)];
+    //move direction randomization out of insertingWord fun
     return insertingWord(word, coords, grid);
   } else {
     //needed some response in case word won't fit

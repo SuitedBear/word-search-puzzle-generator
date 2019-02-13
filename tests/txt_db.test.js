@@ -1,4 +1,4 @@
-const {getDictionary, getSortedDictionary} = require('../src/db');
+const {getDictionary, getSortedDictionary} = require('../src/txt_db');
 
 let dictSource = './src/slowa.txt';
 let dictBadSource = 'badsource';

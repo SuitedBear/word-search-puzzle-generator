@@ -1,9 +1,9 @@
 const express = require('express');
-const { dictionary } = require('./db');
+const { db } = require('./db');
 const { getPuzzle } = require('./apihandlers');
 
 const app = express();
-app.locals.dictionary = dictionary;
+app.locals.db = db;
 
 app.get('/', (req, res) => {
   res.send("It's Alive!");

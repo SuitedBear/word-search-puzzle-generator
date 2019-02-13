@@ -1,8 +1,18 @@
-const {dictionary} = require('./db');
-// const app = require('../src/app');
+const {dictionary} = require('./txt_db');
+const {db} = require('../src/app').locals;
 
 function getArrayOfDeclaredLengthWords(len) {
   return dictionary[len-3];
+}
+
+async function getWordFromDB(len) {
+  let tableName = len + 'lenwords';
+  let randomIndex = await db.one('SELECT CASE WHEN id = 0 THEN 1 ELSE id END FROM (SELECT ROUND(RANDOM() * (SELECT MAX(id) FROM $1~)) as id)', tableName);
+  console.log(randomIndex);
+  if (randomIndex) {
+    let word = await db.one('SELECT * FROM $1~ WHERE id = $2', [tableName, randomIndex]);
+  }
+  return word;
 }
 
 function getWord(len) {
@@ -13,5 +23,6 @@ function getWord(len) {
 }
 
 module.exports = {
-  getWord: getWord
+  getWord: getWord,
+  getWordFromDB: getWordFromDB
 };
