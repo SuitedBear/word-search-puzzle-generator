@@ -1,6 +1,6 @@
 const { generatePuzzle } = require('./grid');
 
-const getPuzzle = (req, res) => {
+const getPuzzle = async (req, res) => {
   let { width, height, words } = req.query;
   let regexp = /\d{1,2}/
    if (isNaN(width) || isNaN(height) || isNaN(words)) {
@@ -14,7 +14,7 @@ const getPuzzle = (req, res) => {
   //   return res.status(400).json('values out of range');
   // }
   if (x && y && _words) {
-    let puzzle = generatePuzzle(x, y, _words);
+    let puzzle = await generatePuzzle(x, y, _words);
     return res.json(puzzle);
   }
   return res.status(400).json('bad request');

@@ -92,14 +92,16 @@ const checkSimilarities = (word, list) => {
   return false;
 }
 
-const generatePuzzle = (x, y, wordCount, maxWordLength=0, difficulty=50) => {
+const generatePuzzle = async (x, y, wordCount, maxWordLength=0, difficulty=50) => {
   let newGrid = getEmptyGrid(x, y);
   let failCounter = 10;
   let wordList = [];
+  let wordLengthLimit = 15;
   //maxWordLength could be greater than grid
   let wordLength = maxWordLength ? maxWordLength : Math.max(x, y);
+  wordLength = Math.min(wordLength, wordLengthLimit); 
   while ((wordList.length < wordCount) && failCounter) {
-    let word = search.getWord(wordLength);
+    let word = await search.getWordFromDB(wordLength);
     if (word === null) {
       //failCounter--;
       wordLength--;

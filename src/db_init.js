@@ -20,17 +20,13 @@ async function populateDatabase (dict, _db) {
     let tempDict = nLengthDict.map(_word => {return {word: _word}});
     let cs = helper.ColumnSet(['word'], {table: tableName});
     let data = helper.insert(tempDict, cs);
-    createTable(_db, tableName)
-    .then(_db.none(data).then(console.log(`data fetched to ${tableName}`)).catch(e => {
+    await createTable(_db, tableName).catch(e => {console.log(`error creating table ${tableName}`)});
+    _db.none(data).then(console.log(`data fetched to ${tableName}`)).catch(e => {
       console.log(`babol w insercie do ${tableName}:\n${e}`);
-    }))
-    .catch(e => console.log(e))
+    })
   }
 }
 
-async function test() {
-  await populateDatabase(dictionary, db);
-  getWordFromDB(14).then(word => console.log(word));
-}
 
-test();
+populateDatabase(dictionary, db);
+ 

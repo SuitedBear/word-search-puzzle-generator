@@ -3,7 +3,7 @@ const { db } = require('./db');
 const { getPuzzle } = require('./apihandlers');
 
 const app = express();
-app.locals.db = db;
+// app.locals.db = db;
 
 app.get('/', (req, res) => {
   res.send("It's Alive!");
@@ -11,8 +11,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/puzzle', (req, res) => {
-  res = getPuzzle(req, res);
-  return res;
+  getPuzzle(req, res).then(res).catch(e => console.log('error in /puzzle endpoint handler: ', e));
 });
 
 app.post('/feedback', (req, res) => {
