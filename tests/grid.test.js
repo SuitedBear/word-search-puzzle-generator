@@ -47,8 +47,9 @@ test('should return null because word is to long', () => {
   expect(grid.insertToGrid('wordlongerthangridsize', testGrid)).toBeNull();
 });
 
-test('should return { grid:array of arrays, list:array } structure', () => {
-  expect(grid.generatePuzzle(x, y, 10)).toEqual(expect.objectContaining({
+test('should return { grid:array of arrays, list:array } structure', async () => {
+  expect.assertions(1);
+  expect(await grid.generatePuzzle(x, y, 10)).toEqual(expect.objectContaining({
     grid: expect.any(Array), 
     list: expect.any(Array)
   }));
