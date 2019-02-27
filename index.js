@@ -6,6 +6,4 @@ app.listen(PORT, () => console.log(`App listening on port ${PORT.toString()} `))
 //TODO:
 //-rethink randomisation and retry counter
 //-word length
-//-rest api
-//-database instead of file
 //-integration tests

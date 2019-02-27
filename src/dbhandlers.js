@@ -33,8 +33,10 @@ async function getWordFromDB(len) {
 async function getIndexRange(tableName) {
   try {
     let indexRange = await db.task(async task => {
-      let minIndex = await task.one('SELECT * FROM $1~ WHERE difficulty > 40 LIMIT 1', tableName);
-      let maxIndex = await task.one('SELECT * FROM $1~ WHERE difficulty < 60 ORDER BY id DESC LIMIT 1', tableName);
+      let minIndex =
+          await task.one('SELECT * FROM $1~ WHERE difficulty > $2 LIMIT 1', [tableName, 40]);
+      let maxIndex =
+          await task.one('SELECT * FROM $1~ WHERE difficulty < $2 ORDER BY id DESC LIMIT 1', [tableName, 60]);
       return {
         minIndex: minIndex.id,
         maxIndex: maxIndex.id,

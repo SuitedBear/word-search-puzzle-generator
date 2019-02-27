@@ -2,6 +2,8 @@ const express = require('express');
 // const { db } = require('./db');
 const { getPuzzle } = require('./apihandlers');
 
+//db cluster and index update at init
+
 const app = express();
 // app.locals.db = db;
 
