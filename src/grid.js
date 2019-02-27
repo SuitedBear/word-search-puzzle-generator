@@ -1,4 +1,4 @@
-const search = require('./search');
+const search = require('./dbhandlers');
 
 const getEmptyGrid = (x, y) => {
   let grid = [];

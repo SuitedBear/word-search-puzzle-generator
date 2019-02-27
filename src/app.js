@@ -1,5 +1,5 @@
 const express = require('express');
-const { db } = require('./db');
+// const { db } = require('./db');
 const { getPuzzle } = require('./apihandlers');
 
 const app = express();
@@ -11,7 +11,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/puzzle', (req, res) => {
-  getPuzzle(req, res).then(res).catch(e => console.log('error in /puzzle endpoint handler: ', e));
+  getPuzzle(req, res);
 });
 
 app.post('/feedback', (req, res) => {
