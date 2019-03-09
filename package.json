@@ -11,11 +11,12 @@
   "author": "MS",
   "license": "ISC",
   "devDependencies": {
-    "jest": "^23.6.0",
-    "nodemon": "^1.18.9"
+    "jest": "^24.1.0",
+    "nodemon": "^1.18.10",
+    "semistandard": "^13.0.1"
   },
   "dependencies": {
     "express": "^4.16.4",
-    "pg-promise": "^8.5.5"
+    "pg-promise": "^8.6.2"
   }
 }

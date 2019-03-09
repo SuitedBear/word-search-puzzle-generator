@@ -4,7 +4,7 @@ const { generatePuzzle } = require('./grid');
 const getPuzzle = async (req, res) => {
   try {
     let { width, height, words } = req.query;
-    let regexp = /\d{1,2}/
+    let regexp = /\d{1,2}/;
     if (isNaN(width) || isNaN(height) || isNaN(words)) {
       return res.status(400).json('bad request');
     }
@@ -20,12 +20,12 @@ const getPuzzle = async (req, res) => {
       return res.json(puzzle);
     }
     return res.status(400).json('bad request');
-  } catch(e) {
+  } catch (e) {
     console.log('error in /puzzle endpoint handler: ', e);
     return res.status(500).json('internal server error :<');
   }
-}
+};
 
 module.exports = {
   getPuzzle: getPuzzle
-}
+};

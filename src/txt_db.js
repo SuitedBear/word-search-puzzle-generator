@@ -1,29 +1,29 @@
-//db stub
+// db stub
 const fs = require('fs');
 
 const getDictionary = (dictSource) => {
   try {
     let dictRaw = fs.readFileSync(dictSource, 'utf8');
     let dictionary = dictRaw.split('\r\n');
-    //last line is empty anyway
+    // last line is empty anyway
     dictionary.pop();
     return dictionary;
   } catch (error) {
     console.log(`couldn't open dictionary source: ${dictSource}\nerror code: ${error.code}`);
     return undefined;
   }
-}
+};
 
 const getSortedDictionary = (dictArray) => {
   let sortedDictionary = [];
   // let stillSearching = 3;
   let wordLength = 3;
-  while(true) { // stillSearching > 0) {
+  while (true) { // stillSearching > 0) {
     let tempArray = dictArray.filter(word => word.length === wordLength);
     if (tempArray.length <= 0) {
       break;
       // stillSearching--;
-    } 
+    }
     sortedDictionary.push(tempArray);
     wordLength++;
   }
@@ -35,7 +35,7 @@ const getSortedDictionary = (dictArray) => {
   //   sortedDictionary.pop();
   // }
   return sortedDictionary;
-}
+};
 
 const dictionary = getSortedDictionary(getDictionary('./src/slowa.txt'));
 
@@ -47,4 +47,4 @@ module.exports = {
   getDictionary: getDictionary,
   getSortedDictionary: getSortedDictionary,
   dictionary: dictionary
-}
+};
