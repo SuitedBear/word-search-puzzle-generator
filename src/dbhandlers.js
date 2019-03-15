@@ -2,10 +2,6 @@ const { dictionary } = require('./txt_db');
 // const {db} = require('./app').locals;
 const { db } = require('./db');
 
-// function getArrayOfDeclaredLengthWords(len) {
-//   return dictionary[len-3];
-// }
-
 function getWord (len) {
   let filteredDict = dictionary[len - 3];
   if (filteredDict == null) return null;
@@ -49,12 +45,30 @@ async function getIndexRange (tableName) {
   }
 }
 
-// async function sortTable(tableName) {
+async function sortTable (tableName) {
+  try {
+    return true;
+  } catch (e) {
+    console.log(`error while sorting ${tableName}:\n${e}`);
+    return false;
+  }
+}
 
-// }
+async function updateWord (word, newDifficulty) {
+  let tableName = word.length + 'lenwords';
+  try {
+    // update in db
+    console.log(word, newDifficulty);
+    return true;
+  } catch (e) {
+    console.log(`error updating ${word} difficulty to ${newDifficulty}:\n${e}`);
+    return false;
+  }
+}
 
 module.exports = {
   getWord: getWord,
   getWordFromDB: getWordFromDB,
-  getIndexRange: getIndexRange
+  getIndexRange: getIndexRange,
+  updateWord: updateWord
 };

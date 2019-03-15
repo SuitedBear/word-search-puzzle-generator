@@ -1,10 +1,12 @@
 const express = require('express');
+const bodyParser = require('body-parser');
 // const { db } = require('./db');
-const { getPuzzle } = require('./apihandlers');
+const { getPuzzle, fetchFeedback } = require('./apihandlers');
 
 // db cluster and index update at init
 
 const app = express();
+app.use(bodyParser.json());
 // app.locals.db = db;
 
 app.get('/', (req, res) => {
@@ -17,7 +19,11 @@ app.get('/puzzle', (req, res) => {
 });
 
 app.post('/feedback', (req, res) => {
-  res.statusCode(404);
+  // sanitization
+  let feedbackTable = req.body;
+  // res before fetching data to db
+  res.status(200).send('Thank You for feedback!');
+  fetchFeedback(feedbackTable);
 });
 
 module.exports = app;

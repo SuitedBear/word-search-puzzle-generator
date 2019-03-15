@@ -1,4 +1,5 @@
 const { generatePuzzle } = require('./grid');
+const { updateWord } = require('./dbhandlers');
 
 // need to refactor srsly!
 const getPuzzle = async (req, res) => {
@@ -26,6 +27,20 @@ const getPuzzle = async (req, res) => {
   }
 };
 
+const fetchFeedback = async (feedbackTable) => {
+  let errCount = 0;
+  for (let row in feedbackTable) {
+    try {
+      updateWord(row, feedbackTable[row]);
+    } catch (e) {
+      console.log(`error while updating ${row}:\n${e}`);
+      errCount++;
+    }
+  }
+  return errCount;
+};
+
 module.exports = {
-  getPuzzle: getPuzzle
+  getPuzzle: getPuzzle,
+  fetchFeedback: fetchFeedback
 };
