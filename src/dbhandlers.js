@@ -54,15 +54,23 @@ async function sortTable (tableName) {
   }
 }
 
-async function updateWord (word, newDifficulty) {
+async function modifyDifficulty (word, modificator) {
   let tableName = word.length + 'lenwords';
   try {
-    // update in db
-    console.log(word, newDifficulty);
-    return true;
+    db.tx(async transaction => {
+      let difficulty = await transaction.one('SELECT * FROM $1~ WHERE word = $2', [ tableName, word ])
+        .then(response => response.difficulty);
+      console.log(`${word} actual difficulty: ${difficulty}`);
+      // to preserve difficulty range 1-100
+      if (difficulty > 1 && difficulty < 99) {
+        let newDifficulty = difficulty + modificator;
+        console.log(`setting ${word} to ${newDifficulty} with modificator ${modificator}`);
+        transaction.none('UPDATE $1~ SET difficulty = $2 WHERE word = $3', [ tableName, newDifficulty, word ]);
+      }
+    });
   } catch (e) {
-    console.log(`error updating ${word} difficulty to ${newDifficulty}:\n${e}`);
-    return false;
+    console.log(`error updating ${word} in modifyDifficulty:\n${e}`);
+    throw e;
   }
 }
 
@@ -70,5 +78,5 @@ module.exports = {
   getWord: getWord,
   getWordFromDB: getWordFromDB,
   getIndexRange: getIndexRange,
-  updateWord: updateWord
+  modifyDifficulty: modifyDifficulty
 };

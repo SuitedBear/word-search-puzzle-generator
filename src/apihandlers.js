@@ -1,5 +1,5 @@
 const { generatePuzzle } = require('./grid');
-const { updateWord } = require('./dbhandlers');
+const { modifyDifficulty } = require('./dbhandlers');
 
 // need to refactor srsly!
 const getPuzzle = async (req, res) => {
@@ -39,6 +39,21 @@ const fetchFeedback = async (feedbackTable) => {
   }
   return errCount;
 };
+
+async function updateWord (word, difficultyRank) {
+  try {
+    if (difficultyRank < 4) {
+      modifyDifficulty(word, -1);
+    } else if (difficultyRank > 7) {
+      modifyDifficulty(word, 1);
+    } else {
+      console.log(`no need to update ${word}`);
+    }
+  } catch (e) {
+    console.log(`error updating ${word} difficulty, rank ${difficultyRank}:\n${e}`);
+    throw e;
+  }
+}
 
 module.exports = {
   getPuzzle: getPuzzle,

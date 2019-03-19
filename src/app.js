@@ -19,8 +19,11 @@ app.get('/puzzle', (req, res) => {
 });
 
 app.post('/feedback', (req, res) => {
-  // sanitization
   let feedbackTable = req.body;
+  console.log(feedbackTable);
+  for (let row in feedbackTable) {
+    // sanitization
+  }
   // res before fetching data to db
   res.status(200).send('Thank You for feedback!');
   fetchFeedback(feedbackTable);
