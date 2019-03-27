@@ -30,7 +30,7 @@ async function getIndexRange (tableName) {
   try {
     let indexRange = await db.task(async task => {
       let minIndex =
-          await task.one('SELECT * FROM $1~ WHERE difficulty > $2 LIMIT 1', [tableName, 40]);
+          await task.one('SELECT * FROM $1~ WHERE difficulty > $2 ORDER BY id LIMIT 1', [tableName, 40]);
       let maxIndex =
           await task.one('SELECT * FROM $1~ WHERE difficulty < $2 ORDER BY id DESC LIMIT 1', [tableName, 60]);
       return {
@@ -46,11 +46,20 @@ async function getIndexRange (tableName) {
 }
 
 async function sortTable (tableName) {
+  let indexName = tableName + '_diff_index';
   try {
-    return true;
+    // set timer ?
+    await db.tx(transaction => {
+      transaction.none('CLUSTER $1~ USING $2~', [ tableName, indexName ]);
+      transaction.none('CREATE TEMP SEQUENCE tempindex');
+      transaction.none('UPDATE $1~ SET id = id + 1000000', tableName);
+      transaction.none("UPDATE $1~ SET id = nextval('tempindex')", tableName);
+      // transaction.none('DROP SEQUENCE tempindex');
+    });
+    let newIndexRange = await getIndexRange(tableName);
+    console.log(newIndexRange);
   } catch (e) {
     console.log(`error while sorting ${tableName}:\n${e}`);
-    return false;
   }
 }
 
@@ -78,5 +87,6 @@ module.exports = {
   getWord: getWord,
   getWordFromDB: getWordFromDB,
   getIndexRange: getIndexRange,
-  modifyDifficulty: modifyDifficulty
+  modifyDifficulty: modifyDifficulty,
+  sortTable: sortTable
 };
