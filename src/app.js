@@ -18,7 +18,7 @@ async function buildLocals (minLen, maxLen) {
   try {
     for (let i = minLen; i <= maxLen; i++) {
       let tableName = i + 'lenwords';
-      dbIndexes.set(tableName, await getIndexRange(tableName));
+      dbIndexes.set(tableName, await sortTable(tableName));
     }
   } catch (e) {
     console.log('there was a problem while building locals!\n', e);
@@ -31,9 +31,6 @@ async function buildLocals (minLen, maxLen) {
   app.locals.dbIndexes = await buildLocals(app.locals.minWordLength, app.locals.maxWordLength);
   app.emit('ready');
 })();
-
-// depromisify that !!!!
-// app.locals.dbIndexes = buildLocals(app.locals.minWordLength, app.locals.maxWordLength);
 
 app.get('/', (req, res) => {
   res.send("It's Alive!");
