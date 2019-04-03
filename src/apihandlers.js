@@ -17,7 +17,7 @@ const getPuzzle = async (req, res) => {
     //   return res.status(400).json('values out of range');
     // }
     if (x && y && _words) {
-      let puzzle = await generatePuzzle(x, y, _words);
+      let puzzle = await generatePuzzle(x, y, _words, req.app.locals.dbIndexes);
       return res.json(puzzle);
     }
     return res.status(400).json('bad request');

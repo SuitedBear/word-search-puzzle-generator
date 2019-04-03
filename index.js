@@ -9,3 +9,4 @@ app.once('ready', () => {
 
 // TODO:
 // -rethink randomisation and retry counter
+// -include cyclic clustering

@@ -1,5 +1,4 @@
 const { dictionary } = require('./txt_db');
-// const {db} = require('./app').locals;
 const { db } = require('./db');
 
 function getWord (len) {
@@ -9,11 +8,14 @@ function getWord (len) {
   return word;
 }
 
-async function getWordFromDB (len) {
-  let tableName = len + 'lenwords';
+async function getWordFromDB (tableName, indexRange) {
   try {
-    let maxIndex = await db.one('SELECT MAX(id) FROM $1~', tableName);
-    let randomIndex = Math.floor(Math.random() * (maxIndex.max)) + 1;
+    let { minIndex, maxIndex } = indexRange;
+    // include min & max indexes
+    console.log(minIndex, maxIndex);
+    let randomRange = maxIndex - minIndex;
+    // let maxIndex = await db.one('SELECT MAX(id) FROM $1~', tableName);
+    let randomIndex = Math.floor(Math.random() * (randomRange)) + minIndex;
     let word = null;
     if (randomIndex) {
       let wordObj = await db.one('SELECT * FROM $1~ WHERE id = $2', [tableName, randomIndex]);
