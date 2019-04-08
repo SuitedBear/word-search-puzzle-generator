@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 // const { db } = require('./db');
 const { getPuzzle, fetchFeedback } = require('./apihandlers');
-const { sortTable, getIndexRange } = require('./dbhandlers');
+const { sortTable, getRanges } = require('./dbhandlers');
 
 // db cluster and index update at init
 
@@ -18,7 +18,8 @@ async function buildLocals (minLen, maxLen) {
   try {
     for (let i = minLen; i <= maxLen; i++) {
       let tableName = i + 'lenwords';
-      dbIndexes.set(tableName, await sortTable(tableName));
+      // dbIndexes.set(tableName, await sortTable(tableName));
+      dbIndexes.set(tableName, await getRanges(tableName));
     }
   } catch (e) {
     console.log('there was a problem while building locals!\n', e);
@@ -45,12 +46,27 @@ app.get('/puzzle', (req, res) => {
 app.post('/feedback', (req, res) => {
   let feedbackTable = req.body;
   console.log(feedbackTable);
-  for (let row in feedbackTable) {
-    // sanitization
-  }
-  // res before fetching data to db
-  res.status(200).send('Thank You for feedback!');
-  fetchFeedback(feedbackTable);
+  let wordRegex = /^[^\W_0-9]{3,15}$/;
+  let difficultyRegex = /^\d\d?$/;
+  const feedbackError =  new Error('feedback format');
+  try {
+    for (let row in feedbackTable) {
+      console.log(row, feedbackTable[row]);
+      if (!(wordRegex.test(row) && difficultyRegex.test(feedbackTable[row]))) {
+        throw feedbackError;
+      }
+    }
+    // res before fetching data to db
+    res.status(202).send('Thank You for feedback!');
+    fetchFeedback(feedbackTable);
+  } catch (e) {
+    console.log(`error in feedback: ${e}`);
+    if (e === feedbackError) {
+      res.status(400).send('wrong feedback format!');
+    } else {
+      res.status(500).send('there was an internal server problem, sorry :<');
+    }    
+  }  
 });
 
 // test endpoint

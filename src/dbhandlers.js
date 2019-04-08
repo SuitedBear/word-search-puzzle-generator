@@ -50,7 +50,6 @@ async function getIndexRange (tableName) {
 async function sortTable (tableName) {
   let indexName = tableName + '_diff_index';
   try {
-    // set timer ?
     await db.tx(transaction => {
       transaction.none('CLUSTER $1~ USING $2~', [ tableName, indexName ]);
       transaction.none('CREATE SEQUENCE tempindex');
@@ -58,6 +57,17 @@ async function sortTable (tableName) {
       transaction.none("UPDATE $1~ SET id = nextval('tempindex')", tableName);
       transaction.none('DROP SEQUENCE tempindex');
     });
+    let newIndexRange = await getIndexRange(tableName);
+    console.log(newIndexRange);
+    return newIndexRange;
+  } catch (e) {
+    console.log(`error while sorting ${tableName}:\n${e}`);
+  }
+}
+
+async function getRanges (tableName) {
+  let indexName = tableName + '_diff_index';
+  try {
     let newIndexRange = await getIndexRange(tableName);
     console.log(newIndexRange);
     return newIndexRange;
@@ -91,5 +101,6 @@ module.exports = {
   getWordFromDB: getWordFromDB,
   getIndexRange: getIndexRange,
   modifyDifficulty: modifyDifficulty,
-  sortTable: sortTable
+  sortTable: sortTable,
+  getRanges: getRanges
 };

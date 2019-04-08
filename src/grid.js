@@ -97,17 +97,16 @@ const generatePuzzle = async (x, y, wordCount, indexMap, maxWordLength=0) => {
   let failCounter = 10;
   let wordList = [];
   let wordLengthLimit = 15;
-  console.log(indexMap);
   // maxWordLength could be greater than grid
-  let wordLength = maxWordLength || Math.max(x, y); // ? maxWordLength : Math.max(x, y);
+  let wordLength = maxWordLength || Math.max(x, y);
   wordLength = Math.min(wordLength, wordLengthLimit);
   while ((wordList.length < wordCount) && failCounter) {
     let tableName = wordLength + 'lenwords';
+    // isolate indexMap.get
     let word = await search.getWordFromDB(tableName, indexMap.get(tableName));
     if (word === null) {
       // failCounter--;
       wordLength--;
-      // console.log(`there isn't any ${wordLength}-letter word!`);
       continue;
     }
     if (checkSimilarities(word, wordList)) {
