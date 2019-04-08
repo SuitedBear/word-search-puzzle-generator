@@ -1,11 +1,14 @@
+/* eslint-env jest */
+
 const grid = require('../src/grid');
 const { db } = require('../src/db');
 
-//test grid size
-let x=10, y=10;
+// test grid size
+let x = 10;
+let y = 10;
 let testWord = 'przetestowany';
 
-async function generateStubIndexMap() {
+async function generateStubIndexMap () {
   let indexMap = new Map();
   try {
     for (let i = 3; i <= 15; i++) {
@@ -24,16 +27,16 @@ async function generateStubIndexMap() {
 test('should generate x by y sized grid', () => {
   let testGrid = grid.getEmptyGrid(x, y);
   expect(testGrid.length).toBe(x);
-  expect(testGrid[x-1].length).toBe(y);
-  expect(testGrid[x-1][y-1]).toBe(' ');
+  expect(testGrid[x - 1].length).toBe(y);
+  expect(testGrid[x - 1][y - 1]).toBe(' ');
 });
 
 test('should fill empty x by y grid', () => {
   let testGrid = grid.getEmptyGrid(x, y);
   testGrid = grid.fillWithLetters(testGrid);
   testGrid = grid.fillWithLetters(testGrid);
-  for (line of testGrid) {
-    for (field of line) {
+  for (let line of testGrid) {
+    for (let field of line) {
       expect(field).toMatch(/\w/);
     }
   }
@@ -55,21 +58,19 @@ test('should return same size grid', () => {
   let testGrid = grid.getEmptyGrid(x, y);
   let returnedGrid = grid.insertToGrid('test', testGrid);
   expect(returnedGrid.length).toBe(testGrid.length);
-  expect(returnedGrid[returnedGrid.length-1].length).toBe(testGrid[testGrid.length-1].length);
+  expect(returnedGrid[returnedGrid.length - 1].length).toBe(testGrid[testGrid.length - 1].length);
 });
 
 test('should return null because word is to long', () => {
-  let testGrid = grid.getEmptyGrid(x,y);
+  let testGrid = grid.getEmptyGrid(x, y);
   expect(grid.insertToGrid('wordlongerthangridsize', testGrid)).toBeNull();
 });
-
-
 
 test('should return { grid:array of arrays, list:array } structure', async () => {
   expect.assertions(1);
   let indexMapStub = await generateStubIndexMap();
   expect(await grid.generatePuzzle(x, y, 10, indexMapStub)).toEqual(expect.objectContaining({
-    grid: expect.any(Array), 
+    grid: expect.any(Array),
     list: expect.any(Array)
   }));
-})
+});

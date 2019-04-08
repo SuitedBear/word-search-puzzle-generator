@@ -1,7 +1,9 @@
+/* eslint-env jest */
+
 const dbHandler = require('../src/dbhandlers');
 const { db } = require('../src/db');
 
-async function generateStubIndexMap() {
+async function generateStubIndexMap () {
   let indexMap = new Map();
   try {
     for (let i = 3; i <= 15; i++) {
@@ -17,7 +19,7 @@ async function generateStubIndexMap() {
   return indexMap;
 }
 
-//zwróć słowo
+// zwróć słowo
 test('should return string of given length', () => {
   let wordLength = 8;
   expect(dbHandler.getWord(wordLength).length).toEqual(wordLength);
@@ -25,7 +27,7 @@ test('should return string of given length', () => {
 
 test('should return string of given length', async () => {
   expect.assertions(1);
-  wordLength = 8;
+  let wordLength = 8;
   let tableName = wordLength + 'lenwords';
   let mapIndexStub = await generateStubIndexMap();
   let word = await dbHandler.getWordFromDB(tableName, mapIndexStub.get(tableName));
@@ -39,6 +41,6 @@ test('should return min and max index at given difficulty range', async () => {
   let returnedObject = await dbHandler.getIndexRange(tableName);
   expect(returnedObject).toEqual(expect.objectContaining({
     minIndex: expect.any(Number),
-    maxIndex: expect.any(Number),
+    maxIndex: expect.any(Number)
   }));
-})
+});

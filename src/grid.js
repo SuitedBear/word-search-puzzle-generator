@@ -92,7 +92,7 @@ const checkSimilarities = (word, list) => {
   return false;
 };
 
-const generatePuzzle = async (x, y, wordCount, indexMap, maxWordLength=0) => {
+const generatePuzzle = async (x, y, wordCount, indexMap, maxWordLength = 0) => {
   let newGrid = getEmptyGrid(x, y);
   let failCounter = 10;
   let wordList = [];

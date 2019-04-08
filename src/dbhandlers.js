@@ -66,7 +66,6 @@ async function sortTable (tableName) {
 }
 
 async function getRanges (tableName) {
-  let indexName = tableName + '_diff_index';
   try {
     let newIndexRange = await getIndexRange(tableName);
     console.log(newIndexRange);

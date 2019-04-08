@@ -12,7 +12,7 @@ app.use(bodyParser.json());
 app.locals.minWordLength = 3;
 app.locals.maxWordLength = 15;
 
-//building locals
+// building locals
 async function buildLocals (minLen, maxLen) {
   let dbIndexes = new Map();
   try {
@@ -48,7 +48,7 @@ app.post('/feedback', (req, res) => {
   console.log(feedbackTable);
   let wordRegex = /^[^\W_0-9]{3,15}$/;
   let difficultyRegex = /^\d\d?$/;
-  const feedbackError =  new Error('feedback format');
+  const feedbackError = new Error('feedback format');
   try {
     for (let row in feedbackTable) {
       console.log(row, feedbackTable[row]);
@@ -65,14 +65,14 @@ app.post('/feedback', (req, res) => {
       res.status(400).send('wrong feedback format!');
     } else {
       res.status(500).send('there was an internal server problem, sorry :<');
-    }    
-  }  
+    }
+  }
 });
 
 // test endpoint
 app.get('/cluster', (req, res) => {
   try {
-    sortTable('12lenwords')
+    sortTable('12lenwords');
     res.status(200).send('Clustered!');
   } catch (e) {
     console.log('clustering error:\n', e);
