@@ -12,6 +12,7 @@ app.use(bodyParser.json());
 app.locals.minWordLength = 3;
 app.locals.maxWordLength = 15;
 
+
 // building locals
 async function buildLocals (minLen, maxLen) {
   let dbIndexes = new Map();
@@ -28,8 +29,19 @@ async function buildLocals (minLen, maxLen) {
   return dbIndexes;
 }
 
+function dateCheck (lastUpdateTime) {
+  let actualTime = new Date();
+  let updateTime = new Date(lastUpdateTime);
+  updateTime.setHours(lastUpdateTime.getHours() + 24);
+  // for testing
+  // updateTime.setMinutes(lastUpdateTime.getMinutes() + 2);
+  return (actualTime > updateTime) ? true : false;
+}
+
 (async function () {
   app.locals.dbIndexes = await buildLocals(app.locals.minWordLength, app.locals.maxWordLength);
+  app.locals.lastUpdate = new Date();
+  console.log(`Clustered at ${app.locals.lastUpdate}`);
   app.emit('ready');
 })();
 
@@ -51,22 +63,29 @@ app.post('/feedback', (req, res) => {
   const feedbackError = new Error('feedback format');
   try {
     for (let row in feedbackTable) {
-      console.log(row, feedbackTable[row]);
       if (!(wordRegex.test(row) && difficultyRegex.test(feedbackTable[row]))) {
         throw feedbackError;
       }
     }
-    // res before fetching data to db
     res.status(202).send('Thank You for feedback!');
-    fetchFeedback(feedbackTable);
   } catch (e) {
     console.log(`error in feedback: ${e}`);
-    if (e === feedbackError) {
-      res.status(400).send('wrong feedback format!');
-    } else {
-      res.status(500).send('there was an internal server problem, sorry :<');
-    }
+    res.status(400).send('wrong feedback format!');
   }
+  fetchFeedback(feedbackTable).then(update => {
+    let checkDate = dateCheck(req.app.locals.lastUpdate);
+    console.log(update, checkDate);
+    if (update && checkDate) {
+      return buildLocals(req.app.locals.minWordLength, req.app.locals.maxWordLength);
+    } else {
+      return null;
+    }
+  }).then(newIndexes => {
+    if (newIndexes != null) {
+      req.app.locals.dbIndexes = newIndexes;
+      req.app.locals.lastUpdate = new Date();
+    }
+  }).catch(e => console.log(`There was a problem fetching data: ${e}`));
 });
 
 // test endpoint

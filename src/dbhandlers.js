@@ -58,7 +58,6 @@ async function sortTable (tableName) {
       transaction.none('DROP SEQUENCE tempindex');
     });
     let newIndexRange = await getIndexRange(tableName);
-    console.log(newIndexRange);
     return newIndexRange;
   } catch (e) {
     console.log(`error while sorting ${tableName}:\n${e}`);
@@ -77,22 +76,22 @@ async function getRanges (tableName) {
 
 async function modifyDifficulty (word, modificator) {
   let tableName = word.length + 'lenwords';
-  try {
-    db.tx(async transaction => {
-      let difficulty = await transaction.one('SELECT * FROM $1~ WHERE word = $2', [ tableName, word ])
-        .then(response => response.difficulty);
-      console.log(`${word} actual difficulty: ${difficulty}`);
-      // to preserve difficulty range 1-100
-      if (difficulty > 1 && difficulty < 99) {
-        let newDifficulty = difficulty + modificator;
-        console.log(`setting ${word} to ${newDifficulty} with modificator ${modificator}`);
-        transaction.none('UPDATE $1~ SET difficulty = $2 WHERE word = $3', [ tableName, newDifficulty, word ]);
-      }
+  db.tx(async transaction => {
+    let difficulty = await transaction.one('SELECT * FROM $1~ WHERE word = $2', [ tableName, word ])
+      .then(response => response.difficulty).catch(e => {
+        console.log(`error finding ${word}`);
+        throw e;
     });
-  } catch (e) {
+    console.log(`${word} actual difficulty: ${difficulty}`);
+    // to preserve difficulty range 1-100
+    if (difficulty > 1 && difficulty < 99) {
+      let newDifficulty = difficulty + modificator;
+      console.log(`setting ${word} to ${newDifficulty} with modificator ${modificator}`);
+      transaction.none('UPDATE $1~ SET difficulty = $2 WHERE word = $3', [ tableName, newDifficulty, word ]);
+    }
+  }).catch(e => { 
     console.log(`error updating ${word} in modifyDifficulty:\n${e}`);
-    throw e;
-  }
+  });
 }
 
 module.exports = {

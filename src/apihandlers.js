@@ -2,7 +2,7 @@ const { generatePuzzle } = require('./grid');
 const { modifyDifficulty } = require('./dbhandlers');
 
 // need to refactor srsly!
-const getPuzzle = async (req, res) => {
+async function getPuzzle (req, res) {
   try {
     let { width, height, words } = req.query;
     let regexp = /\d{1,2}/;
@@ -27,28 +27,30 @@ const getPuzzle = async (req, res) => {
   }
 };
 
-const fetchFeedback = async (feedbackTable) => {
-  let errCount = 0;
+async function fetchFeedback (feedbackTable) {
+  let changed = 0;
   for (let row in feedbackTable) {
     try {
-      updateWord(row, feedbackTable[row]);
+      if(await updateWord(row.toLowerCase(), feedbackTable[row])) changed++;
     } catch (e) {
       console.log(`error while updating ${row}:\n${e}`);
-      errCount++;
     }
   }
-  return errCount;
+  return changed;
 };
 
 async function updateWord (word, difficultyRank) {
   try {
+    // try to simplify this
     if (difficultyRank < 4) {
       modifyDifficulty(word, -1);
-    } else if (difficultyRank > 7) {
-      modifyDifficulty(word, 1);
-    } else {
-      console.log(`no need to update ${word}`);
+      return true;
     }
+    if (difficultyRank > 7) {
+      modifyDifficulty(word, 1);
+      return true;
+    } 
+    return false;
   } catch (e) {
     console.log(`error updating ${word} difficulty, rank ${difficultyRank}:\n${e}`);
     throw e;
