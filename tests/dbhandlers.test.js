@@ -44,3 +44,11 @@ test('should return min and max index at given difficulty range', async () => {
     maxIndex: expect.any(Number)
   }));
 });
+
+test('should resolve Falsy', async () => {
+  expect.assertions(2);
+  let negativeTestOne = await dbHandler.modifyDifficulty('imaginarytestwordthatstoolong', 1);
+  let negativetestTwo =  await dbHandler.modifyDifficulty('shortwrong', 1);
+  expect(negativeTestOne).toBeFalsy();
+  expect(negativetestTwo).toBeFalsy();  
+});

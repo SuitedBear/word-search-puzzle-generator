@@ -64,6 +64,7 @@ async function sortTable (tableName) {
   }
 }
 
+// for testing purposes only
 async function getRanges (tableName) {
   try {
     let newIndexRange = await getIndexRange(tableName);
@@ -89,9 +90,11 @@ async function modifyDifficulty (word, modificator) {
       console.log(`setting ${word} to ${newDifficulty} with modificator ${modificator}`);
       transaction.none('UPDATE $1~ SET difficulty = $2 WHERE word = $3', [ tableName, newDifficulty, word ]);
     }
-  }).catch(e => { 
+  }).then(true).catch(e => { 
     console.log(`error updating ${word} in modifyDifficulty:\n${e}`);
+    return false;
   });
+  
 }
 
 module.exports = {

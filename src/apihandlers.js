@@ -29,12 +29,12 @@ async function getPuzzle (req, res) {
 
 async function fetchFeedback (feedbackTable) {
   let changed = 0;
-  for (let row in feedbackTable) {
-    try {
-      if(await updateWord(row.toLowerCase(), feedbackTable[row])) changed++;
-    } catch (e) {
-      console.log(`error while updating ${row}:\n${e}`);
+  try {
+    for (let row in feedbackTable) {
+        if(await updateWord(row.toLowerCase(), feedbackTable[row])) changed++;
     }
+  } catch (e) {
+    console.log(`error in fetchFeedback:\n${feedbackTable}\n${e}`);
   }
   return changed;
 };
