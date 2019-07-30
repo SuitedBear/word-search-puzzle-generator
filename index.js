@@ -8,5 +8,9 @@ app.once('ready', () => {
 });
 
 // TODO:
+// -move sanitization in puzzle generation to endpoint
 // -rethink randomisation and retry counter
-// -include cyclic clustering
+// -enviromentals (prod/dev)
+// -db credentials
+// -readme
+// -static page info

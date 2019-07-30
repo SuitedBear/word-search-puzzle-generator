@@ -11,14 +11,17 @@
   "author": "MS",
   "license": "ISC",
   "devDependencies": {
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.18.0",
     "jest": "^24.1.0",
-    "nodemon": "^1.18.10",
-    "semistandard": "^13.0.1"
+    "nodemon": "^1.18.10"
   },
   "dependencies": {
     "body-parser": "^1.18.3",
+    "cors": "^2.8.5",
     "express": "^4.16.4",
-    "npm": "^6.9.0",
+    "npm": "^6.10.2",
     "pg-promise": "^8.6.2"
   }
 }

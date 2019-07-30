@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const bodyParser = require('body-parser');
 // const { db } = require('./db');
 const { getPuzzle, fetchFeedback } = require('./apihandlers');
@@ -7,6 +8,7 @@ const { sortTable, getRanges } = require('./dbhandlers');
 // db cluster and index update at init
 
 const app = express();
+app.use(cors());
 app.use(bodyParser.json());
 // app.locals.db = db;
 app.locals.minWordLength = 3;
